@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "IOS Simulator",
+      "request": "launch",
+      "type": "dart",
+      "args": ["-d", "iPhone", "--dart-define", "ENVIRONMENT=dev"]
+    },
+    {
+      "name": "Android",
+      "request": "launch",
+      "type": "dart",
+      "args": ["-d", "SM G960F", "--dart-define", "ENVIRONMENT=dev"]
+    }
+  ]
+}
