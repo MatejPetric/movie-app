@@ -42,7 +42,7 @@ class PopularMoviesScreen extends ConsumerWidget {
                       }),
                 ),
               AsyncError(:final error) => Text('Error: $error'),
-              _ => const CircularProgressIndicator(),
+              _ => const Center(child: CircularProgressIndicator()),
             },
           ],
         ),

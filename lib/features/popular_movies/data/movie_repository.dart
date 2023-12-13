@@ -9,21 +9,20 @@ import 'package:movie_app/features/popular_movies/domain/movie.dart';
 import 'package:movie_app/features/popular_movies/domain/movie_response.dart';
 import 'package:movie_app/services/network/api_endpoints.dart';
 import 'package:movie_app/services/network/api_service.dart';
-import 'package:movie_app/services/network/env_config.dart';
+import 'package:movie_app/services/storage/hive_storage_service.dart';
 
 class MovieRepository {
   ApiService apiService;
+  HiveStorageService hiveStorageService;
 
   MovieRepository({
     required this.apiService,
+    required this.hiveStorageService,
   });
 
   Future<List<Movie>?> fetchPopularMovies(int page) async {
-    String locale = Platform.localeName;
-
     return await apiService.request(
-      endpoint:
-          '${ApiEndpoints.movieList}?api_key=${EnvConfig.apiKey}&language=$locale&page=$page',
+      endpoint: '${ApiEndpoints.movieList}?page=$page',
       httpMethod: HttpMethod.get,
       onSuccess: (responseData) async {
         MovieResponse movieResponse = MovieResponse.fromJson(responseData);
@@ -42,11 +41,6 @@ class MovieRepository {
     return await apiService.request(
       endpoint: ApiEndpoints.genreList,
       httpMethod: HttpMethod.get,
-      //TODO move that in separate file
-      options: Options(headers: {
-        'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiOGQ3Zjc2OTQ3OTA0YTAxMTI4NmRjNzMyYzU1MjM0ZSIsInN1YiI6IjYwMzM3ODBiMTEzODZjMDAzZjk0ZmM2YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.XYuIrLxvowrkevwKx-KhOiOGZ2Tn-R8tEksXq842kX4'
-      }),
       onSuccess: (responseData) async {
         GenreResponse genreResponse = GenreResponse.fromJson(responseData);
         return genreResponse.genres;
@@ -59,12 +53,28 @@ class MovieRepository {
       },
     );
   }
+
+  Future<void> saveMoviesLocally({
+    required List<Movie> movies,
+  }) async {
+    for (final movie in movies) {
+      await hiveStorageService.setValue<Movie>(
+        key: movie.id.toString(),
+        data: movie,
+        boxName: HiveBoxesEnum.movies.name,
+      );
+    }
+  }
 }
 
 final movieRepositoryProvider = Provider((ref) {
   final apiService = ref.watch(apiServiceProvider);
+  final hiveStorageService = ref.watch(hiveStorageServiceProvider);
 
-  return MovieRepository(apiService: apiService);
+  return MovieRepository(
+    apiService: apiService,
+    hiveStorageService: hiveStorageService,
+  );
 });
 
 final popularMovieListProvider = FutureProvider<List<Movie>?>((ref) async {
