@@ -17,7 +17,10 @@ class MyTheme {
             TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
           },
         ),
-        iconTheme: IconThemeData(color: myColorsLight.text),
+        appBarTheme: AppBarTheme(
+          backgroundColor: myColorsLight.background,
+        ),
+        iconTheme: IconThemeData(color: myColorsLight.textDark),
         splashFactory: defaultTargetPlatform == TargetPlatform.android
             ? InkSparkle.splashFactory
             : NoSplash.splashFactory,
@@ -42,7 +45,10 @@ class MyTheme {
             TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
           },
         ),
-        iconTheme: IconThemeData(color: myColorsDark.text),
+        appBarTheme: AppBarTheme(
+          backgroundColor: myColorsDark.background,
+        ),
+        iconTheme: IconThemeData(color: myColorsDark.textLight),
         splashFactory: defaultTargetPlatform == TargetPlatform.android
             ? InkSparkle.splashFactory
             : NoSplash.splashFactory,

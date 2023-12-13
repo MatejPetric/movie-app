@@ -20,5 +20,8 @@ class MyColorsDark extends MyColors {
   Color get splash => const Color.fromRGBO(182, 5, 51, 0.28);
 
   @override
-  Color get text => const Color.fromRGBO(228, 236, 239, 1);
+  Color get textDark => const Color.fromRGBO(228, 236, 239, 1);
+
+  @override
+  Color get textLight => const Color.fromRGBO(228, 236, 239, 1);
 }

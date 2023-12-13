@@ -10,7 +10,7 @@ final class MyTextStylesLight extends MyTextStyles {
   TextStyle get h1 => TextStyle(
         fontFamily: 'SF Pro Display',
         fontSize: 22.sp,
-        color: myColorsLight.text,
+        color: myColorsLight.textDark,
         fontWeight: FontWeight.w600,
         height: 1.27.h,
       );
@@ -19,7 +19,7 @@ final class MyTextStylesLight extends MyTextStyles {
   TextStyle get h2 => TextStyle(
         fontFamily: 'SF Pro Display',
         fontSize: 20.sp,
-        color: myColorsLight.text,
+        color: myColorsLight.textDark,
         fontWeight: FontWeight.w600,
         height: 1.25.h,
       );
@@ -28,7 +28,7 @@ final class MyTextStylesLight extends MyTextStyles {
   TextStyle get h3 => TextStyle(
         fontFamily: 'SF Pro Display',
         fontSize: 15.sp,
-        color: myColorsLight.text,
+        color: myColorsLight.textDark,
         fontWeight: FontWeight.w600,
         height: 1.33.h,
       );
@@ -37,7 +37,7 @@ final class MyTextStylesLight extends MyTextStyles {
   TextStyle get h4 => TextStyle(
         fontFamily: 'SF Pro Display',
         fontSize: 12.sp,
-        color: myColorsLight.text,
+        color: myColorsLight.textDark,
         fontWeight: FontWeight.w400,
         height: 1.33.h,
       );
@@ -46,7 +46,7 @@ final class MyTextStylesLight extends MyTextStyles {
   TextStyle get h5 => TextStyle(
         fontFamily: 'SF Pro',
         fontSize: 12.sp,
-        color: myColorsLight.text,
+        color: Colors.white,
         fontWeight: FontWeight.w400,
         height: 1.33.h,
       );
@@ -55,7 +55,7 @@ final class MyTextStylesLight extends MyTextStyles {
   TextStyle get h6 => TextStyle(
         fontFamily: 'SF Pro',
         fontSize: 11.sp,
-        color: myColorsLight.text,
+        color: Colors.white,
         fontWeight: FontWeight.w400,
         height: 1.18.h,
       );
@@ -64,7 +64,7 @@ final class MyTextStylesLight extends MyTextStyles {
   TextStyle get p1 => TextStyle(
         fontFamily: 'SF Pro Display',
         fontSize: 13.sp,
-        color: myColorsLight.text,
+        color: myColorsLight.textDark,
         fontWeight: FontWeight.w300,
         height: 1.38.h,
       );

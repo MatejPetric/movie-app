@@ -5,6 +5,7 @@ abstract class MyColors {
   Color get primaryFaded;
   Color get secondary;
   Color get background;
-  Color get text;
+  Color get textDark;
+  Color get textLight;
   Color get splash;
 }
