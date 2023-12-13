@@ -28,7 +28,7 @@ class MovieListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CachedNetworkImageWidget(
-              url: "${ApiEndpoints.posterBase}${movie.posterPath}",
+              url: "${apiEndpoints.posterBase}${movie.posterPath}",
               borderRadius: BorderRadius.circular(4.r),
               height: 100.h,
               width: 100.w,

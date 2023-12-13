@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_app/services/network/env_config.dart';
@@ -19,7 +18,7 @@ class ApiService {
   ));
 
   Options defaultOptions =
-      Options(headers: {'Authorization': 'Bearer ${envConfig.bearer} '});
+      Options(headers: {'Authorization': 'Bearer ${envConfig.bearer}'});
 
   Future request({
     required String endpoint,

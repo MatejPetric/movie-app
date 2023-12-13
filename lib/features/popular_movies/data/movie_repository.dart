@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_app/features/popular_movies/domain/genre.dart';
@@ -22,7 +20,7 @@ class MovieRepository {
 
   Future<List<Movie>?> fetchPopularMovies(int page) async {
     return await apiService.request(
-      endpoint: '${ApiEndpoints.movieList}?page=$page',
+      endpoint: '${apiEndpoints.movieList}?page=$page',
       httpMethod: HttpMethod.get,
       onSuccess: (responseData) async {
         MovieResponse movieResponse = MovieResponse.fromJson(responseData);
@@ -39,7 +37,7 @@ class MovieRepository {
 
   Future<List<Genre>?> fetchGenreList() async {
     return await apiService.request(
-      endpoint: ApiEndpoints.genreList,
+      endpoint: apiEndpoints.genreList,
       httpMethod: HttpMethod.get,
       onSuccess: (responseData) async {
         GenreResponse genreResponse = GenreResponse.fromJson(responseData);
