@@ -64,7 +64,7 @@ class MovieRepository {
     }
   }
 
-  Future<List<Movie>?> fetchMoviesLocally() async {
+  List<Movie>? fetchMoviesLocally() {
     final localMovies =
         hiveStorageService.getAll<Movie>(boxName: HiveBoxesEnum.movies.name);
     return localMovies;
@@ -111,4 +111,8 @@ final genreListProvider = FutureProvider<List<Genre>?>((ref) async {
 
 final genresLocalListProvider = Provider<List<Genre>?>((ref) {
   return ref.read(movieRepositoryProvider).fetchGenresLocally();
+});
+
+final moviesLocalListProvider = Provider<List<Movie>?>((ref) {
+  return ref.read(movieRepositoryProvider).fetchMoviesLocally();
 });

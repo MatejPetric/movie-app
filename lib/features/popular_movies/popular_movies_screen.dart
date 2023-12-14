@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:movie_app/common_widgets/empty_state_widget.dart';
 import 'package:movie_app/common_widgets/my_app_bar.dart';
+import 'package:movie_app/features/favourite_movies/data/favourites_repository.dart';
 import 'package:movie_app/features/popular_movies/controller/popular_movies_screen_controller.dart';
 import 'package:movie_app/features/popular_movies/domain/movie.dart';
 import 'package:movie_app/features/popular_movies/widgets/movie_list_item.dart';
@@ -62,6 +63,7 @@ class _PopularMoviesScreenState extends ConsumerState<PopularMoviesScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(popularMoviesListScreenControllerProvider);
+    final favouriteIds = ref.watch(fetchFavouriteIdsListProvider.notifier);
     List<Movie>? movies = state.value?.movies;
 
     return Scaffold(
@@ -79,6 +81,7 @@ class _PopularMoviesScreenState extends ConsumerState<PopularMoviesScreen> {
             SizedBox(height: 20.h),
             Expanded(
               child: ListView.separated(
+                padding: EdgeInsets.only(bottom: 40.h),
                 controller: scrollController,
                 separatorBuilder: (context, index) => SizedBox(height: 20.h),
                 itemCount: (movies?.length ?? 0) + 1,
@@ -86,6 +89,8 @@ class _PopularMoviesScreenState extends ConsumerState<PopularMoviesScreen> {
                   if (index < (movies?.length ?? 0)) {
                     Movie movie = movies![index];
                     return MovieListItem(
+                      isFavourite:
+                          (favouriteIds.state ?? []).contains(movie.id),
                       movie: movie,
                       onTap: () => context.goNamed(
                         AppRoute.movieDetailsScreen.name,

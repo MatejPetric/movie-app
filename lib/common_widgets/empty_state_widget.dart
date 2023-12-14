@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmptyStateWidget extends ConsumerWidget {
-  final VoidCallback onRefresh;
+  final VoidCallback? onRefresh;
   const EmptyStateWidget({
     super.key,
-    required this.onRefresh,
+    this.onRefresh,
   });
 
   @override
@@ -20,10 +19,11 @@ class EmptyStateWidget extends ConsumerWidget {
         Text(AppLocalizations.of(context).noDataMessage,
             style: Theme.of(context).textTheme.headlineLarge),
         SizedBox(height: 12.h),
-        ElevatedButton(
-          onPressed: onRefresh,
-          child: const Text('Refresh'),
-        )
+        if (onRefresh != null)
+          ElevatedButton(
+            onPressed: onRefresh,
+            child: Text(AppLocalizations.of(context).refreshLabel),
+          )
       ],
     );
   }

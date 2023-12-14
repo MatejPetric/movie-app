@@ -9,6 +9,9 @@ class MyIcons {
   String star = 'assets/icons/star.svg';
   String bookmarkOn = 'assets/icons/bookmark_on.svg';
   String bookmarkOff = 'assets/icons/bookmark_off.svg';
+  String popularMovie = 'assets/icons/movie.svg';
+  String favoriteMovie = 'assets/icons/favorites.svg';
+  String bookmarkFull = 'assets/icons/bookmark_full.svg';
 }
 
 class MyImages {

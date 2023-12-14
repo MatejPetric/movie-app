@@ -2,5 +2,9 @@
   "appTitle": "Movie aplikacija",
   "popularMovieListTitle": "Popularno",
   "noInternetMessage": "Nema internetske veze",
-  "noDataMessage": "Nema podataka..."
+  "noDataMessage": "Nema podataka...",
+  "bottomBarMoviesLabel": "Filmovi",
+  "bottomBarFavouritesLabel": "Favoriti",
+  "favouritesMovieListTitle": "Favoriti",
+  "refreshLabel": "Osvježi"
 }

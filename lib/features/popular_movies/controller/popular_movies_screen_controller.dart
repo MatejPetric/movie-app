@@ -57,7 +57,7 @@ class PopularMoviesListScreenController
 
   Future<PopularMoviesScreenState> fetchMoviesLocally() async {
     List<Movie>? movies =
-        await ref.read(movieRepositoryProvider).fetchMoviesLocally();
+        ref.read(movieRepositoryProvider).fetchMoviesLocally();
     late int page;
     if (movies?.isNotEmpty ?? false) {
       page = (movies!.length / 20).floor();

@@ -16,7 +16,7 @@ void main() async {
   final hiveStorageService = HiveStorageService();
   await hiveStorageService.openBox<Movie>(HiveBoxesEnum.movies.name);
   await hiveStorageService.openBox<Genre>(HiveBoxesEnum.genres.name);
-  await hiveStorageService.openBox<String>(HiveBoxesEnum.favorites.name);
+  await hiveStorageService.openBox<int>(HiveBoxesEnum.favorites.name);
 
   runApp(
     ProviderScope(
