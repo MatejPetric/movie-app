@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:movie_app/common_widgets/empty_state_widget.dart';
 import 'package:movie_app/common_widgets/my_app_bar.dart';
 import 'package:movie_app/features/popular_movies/controller/popular_movies_screen_controller.dart';
 import 'package:movie_app/features/popular_movies/domain/movie.dart';
@@ -92,16 +93,9 @@ class _PopularMoviesScreenState extends ConsumerState<PopularMoviesScreen> {
                       ),
                     );
                   } else if (!state.isLoading && (movies?.isEmpty ?? false)) {
-                    return Column(
-                      children: [
-                        const Icon(
-                            size: 72,
-                            Icons.search_off_outlined,
-                            color: Colors.grey),
-                        SizedBox(height: 4.h),
-                        Text(AppLocalizations.of(context).noDataMessage,
-                            style: Theme.of(context).textTheme.headlineLarge),
-                      ],
+                    return EmptyStateWidget(
+                      onRefresh: () => ref.refresh(
+                          popularMoviesListScreenControllerProvider.future),
                     );
                   } else if (state.isLoading) {
                     return const Center(child: CircularProgressIndicator());

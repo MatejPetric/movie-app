@@ -67,8 +67,26 @@ class MovieRepository {
   Future<List<Movie>?> fetchMoviesLocally() async {
     final localMovies =
         hiveStorageService.getAll<Movie>(boxName: HiveBoxesEnum.movies.name);
-
     return localMovies;
+  }
+
+  Future<void> saveGenresLocally({
+    required List<Genre> genres,
+  }) async {
+    for (final genre in genres) {
+      await hiveStorageService.setValue<Genre>(
+        key: genre.id.toString(),
+        data: genre,
+        boxName: HiveBoxesEnum.genres.name,
+      );
+    }
+  }
+
+  List<Genre> fetchGenresLocally() {
+    final localGenres =
+        hiveStorageService.getAll<Genre>(boxName: HiveBoxesEnum.genres.name);
+
+    return localGenres;
   }
 }
 
@@ -89,4 +107,8 @@ final popularMovieListProvider =
 
 final genreListProvider = FutureProvider<List<Genre>?>((ref) async {
   return await ref.read(movieRepositoryProvider).fetchGenreList();
+});
+
+final genresLocalListProvider = Provider<List<Genre>?>((ref) {
+  return ref.read(movieRepositoryProvider).fetchGenresLocally();
 });

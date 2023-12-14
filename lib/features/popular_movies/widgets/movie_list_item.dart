@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:movie_app/common_widgets/cached_network_image_widget.dart';
 import 'package:movie_app/common_widgets/genres_wrap_widget.dart';
 import 'package:movie_app/common_widgets/movie_rating_widget.dart';
@@ -21,7 +22,9 @@ class MovieListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () async {
+        await InternetConnection().hasInternetAccess ? onTap() : () {};
+      },
       child: SizedBox(
         height: 100.h,
         child: Row(
@@ -53,10 +56,8 @@ class MovieListItem extends StatelessWidget {
                     height: 24.h,
                     child: Consumer(builder: (context, ref, child) {
                       List<int>? genreIds = movie.genreIds;
-                      AsyncValue<List<Genre>?> genres =
-                          ref.watch(genreListProvider);
-
-                      List<Genre>? filteredGenres = (genres.value ?? [])
+                      List<Genre>? genres = ref.read(genresLocalListProvider);
+                      List<Genre>? filteredGenres = (genres ?? [])
                           .where((genre) => genreIds.contains(genre.id))
                           .toList();
 

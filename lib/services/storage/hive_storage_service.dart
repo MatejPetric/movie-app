@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-enum HiveBoxesEnum { movies, favorites }
+enum HiveBoxesEnum { movies, genres, favorites }
 
 class HiveStorageService {
   Future<void> openBox<T>(String boxName) async {

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:movie_app/features/popular_movies/controller/popular_movies_screen_state.dart';
 import 'package:movie_app/features/popular_movies/data/movie_repository.dart';
+import 'package:movie_app/features/popular_movies/domain/genre.dart';
 import 'package:movie_app/features/popular_movies/domain/movie.dart';
 
 class PopularMoviesListScreenController
@@ -9,6 +10,8 @@ class PopularMoviesListScreenController
   @override
   Future<PopularMoviesScreenState> build() async {
     if (await InternetConnection().hasInternetAccess) {
+      List<Genre>? genres = await _fetchGenres();
+      await saveGenresLocally(genres);
       return _fetchMovies();
     } else {
       return fetchMoviesLocally();
@@ -42,12 +45,24 @@ class PopularMoviesListScreenController
     }
   }
 
+  Future<List<Genre>?> _fetchGenres() async {
+    return await ref.read(genreListProvider.future);
+  }
+
+  Future<void> saveGenresLocally(List<Genre>? genres) async {
+    if (genres != null) {
+      await ref.read(movieRepositoryProvider).saveGenresLocally(genres: genres);
+    }
+  }
+
   Future<PopularMoviesScreenState> fetchMoviesLocally() async {
     List<Movie>? movies =
         await ref.read(movieRepositoryProvider).fetchMoviesLocally();
     late int page;
     if (movies?.isNotEmpty ?? false) {
       page = (movies!.length / 20).floor();
+    } else {
+      page = 1;
     }
     return PopularMoviesScreenState(movies: movies, page: page);
   }
