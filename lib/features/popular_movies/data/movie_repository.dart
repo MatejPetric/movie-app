@@ -63,6 +63,13 @@ class MovieRepository {
       );
     }
   }
+
+  Future<List<Movie>?> fetchMoviesLocally() async {
+    final localMovies =
+        hiveStorageService.getAll<Movie>(boxName: HiveBoxesEnum.movies.name);
+
+    return localMovies;
+  }
 }
 
 final movieRepositoryProvider = Provider((ref) {
@@ -75,8 +82,9 @@ final movieRepositoryProvider = Provider((ref) {
   );
 });
 
-final popularMovieListProvider = FutureProvider<List<Movie>?>((ref) async {
-  return await ref.read(movieRepositoryProvider).fetchPopularMovies(1);
+final popularMovieListProvider =
+    Provider.family.autoDispose((ref, int page) async {
+  return ref.read(movieRepositoryProvider).fetchPopularMovies(page);
 });
 
 final genreListProvider = FutureProvider<List<Genre>?>((ref) async {

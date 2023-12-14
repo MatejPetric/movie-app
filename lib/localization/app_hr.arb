@@ -1,4 +1,6 @@
 {
   "appTitle": "Movie aplikacija",
-  "popularMovieListTitle": "Popularno"
+  "popularMovieListTitle": "Popularno",
+  "noInternetMessage": "Nema internetske veze",
+  "noDataMessage": "Nema podataka..."
 }

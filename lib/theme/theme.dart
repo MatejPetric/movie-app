@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:movie_app/theme/my_assets.dart';
 import 'package:movie_app/theme/my_colors/my_colors_dark.dart';
 import 'package:movie_app/theme/my_colors/my_colors_light.dart';
 import 'package:movie_app/theme/my_text_styles/my_text_styles_dark.dart';
@@ -19,6 +21,14 @@ class MyTheme {
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: myColorsLight.background,
+        ),
+        actionIconTheme: ActionIconThemeData(
+          backButtonIconBuilder: (BuildContext context) => IconButton(
+            onPressed: () => Navigator.maybePop(context),
+            icon: SvgPicture.asset(
+              MyAssets.icons.arrowBack,
+            ),
+          ),
         ),
         iconTheme: IconThemeData(color: myColorsLight.textDark),
         splashFactory: defaultTargetPlatform == TargetPlatform.android
@@ -47,6 +57,14 @@ class MyTheme {
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: myColorsDark.background,
+        ),
+        actionIconTheme: ActionIconThemeData(
+          backButtonIconBuilder: (BuildContext context) => IconButton(
+            onPressed: () => Navigator.maybePop(context),
+            icon: SvgPicture.asset(
+              MyAssets.icons.arrowBack,
+            ),
+          ),
         ),
         iconTheme: IconThemeData(color: myColorsDark.textLight),
         splashFactory: defaultTargetPlatform == TargetPlatform.android

@@ -1,4 +1,6 @@
 {
   "appTitle": "Movie app",
-  "popularMovieListTitle": "Popular"
+  "popularMovieListTitle": "Popular",
+  "noInternetMessage": "No Internet Connection",
+  "noDataMessage": "No data..."
 }

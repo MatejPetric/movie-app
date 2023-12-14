@@ -56,7 +56,7 @@ class MovieListItem extends StatelessWidget {
                       AsyncValue<List<Genre>?> genres =
                           ref.watch(genreListProvider);
 
-                      List<Genre> filteredGenres = (genres.value ?? [])
+                      List<Genre>? filteredGenres = (genres.value ?? [])
                           .where((genre) => genreIds.contains(genre.id))
                           .toList();
 

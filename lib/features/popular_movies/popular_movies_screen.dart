@@ -1,20 +1,67 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:movie_app/common_widgets/my_app_bar.dart';
-import 'package:movie_app/features/popular_movies/data/movie_repository.dart';
+import 'package:movie_app/features/popular_movies/controller/popular_movies_screen_controller.dart';
 import 'package:movie_app/features/popular_movies/domain/movie.dart';
 import 'package:movie_app/features/popular_movies/widgets/movie_list_item.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:movie_app/helpers/snackbar_helper.dart';
 import 'package:movie_app/routing/go_router.dart';
 
-class PopularMoviesScreen extends ConsumerWidget {
+class PopularMoviesScreen extends ConsumerStatefulWidget {
   const PopularMoviesScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<Movie>?> movies = ref.watch(popularMovieListProvider);
+  ConsumerState<PopularMoviesScreen> createState() =>
+      _PopularMoviesScreenState();
+}
+
+class _PopularMoviesScreenState extends ConsumerState<PopularMoviesScreen> {
+  ScrollController scrollController = ScrollController();
+  late StreamSubscription<InternetStatus> internetConnectionServiceListener;
+  @override
+  void initState() {
+    scrollController.addListener(_scrollListener);
+    internetConnectionServiceListener =
+        InternetConnection().onStatusChange.listen((InternetStatus status) {
+      switch (status) {
+        case InternetStatus.connected:
+          break;
+        case InternetStatus.disconnected:
+          SnackbarHelper.showMySnackbar(
+              context, AppLocalizations.of(context).noInternetMessage);
+          break;
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    internetConnectionServiceListener.cancel();
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+        await ref
+            .read(popularMoviesListScreenControllerProvider.notifier)
+            .fetchMoreMovies();
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(popularMoviesListScreenControllerProvider);
+    List<Movie>? movies = state.value?.movies;
 
     return Scaffold(
       appBar: const MyAppBar(),
@@ -29,26 +76,40 @@ class PopularMoviesScreen extends ConsumerWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             SizedBox(height: 20.h),
-            switch (movies) {
-              AsyncData(:List<Movie>? value) => Expanded(
-                  child: ListView.separated(
-                      separatorBuilder: (context, index) =>
-                          SizedBox(height: 20.h),
-                      itemCount: value?.length ?? 0,
-                      itemBuilder: (context, index) {
-                        Movie movie = value![index];
-                        return MovieListItem(
-                          movie: movie,
-                          onTap: () => context.goNamed(
-                            AppRoute.movieDetailsScreen.name,
-                            pathParameters: {'id': movie.id.toString()},
-                          ),
-                        );
-                      }),
-                ),
-              AsyncError(:final error) => Text('Error: $error'),
-              _ => const Center(child: CircularProgressIndicator()),
-            },
+            Expanded(
+              child: ListView.separated(
+                controller: scrollController,
+                separatorBuilder: (context, index) => SizedBox(height: 20.h),
+                itemCount: (movies?.length ?? 0) + 1,
+                itemBuilder: (context, index) {
+                  if (index < (movies?.length ?? 0)) {
+                    Movie movie = movies![index];
+                    return MovieListItem(
+                      movie: movie,
+                      onTap: () => context.goNamed(
+                        AppRoute.movieDetailsScreen.name,
+                        pathParameters: {'id': movie.id.toString()},
+                      ),
+                    );
+                  } else if (!state.isLoading && (movies?.isEmpty ?? false)) {
+                    return Column(
+                      children: [
+                        const Icon(
+                            size: 72,
+                            Icons.search_off_outlined,
+                            color: Colors.grey),
+                        SizedBox(height: 4.h),
+                        Text(AppLocalizations.of(context).noDataMessage,
+                            style: Theme.of(context).textTheme.headlineLarge),
+                      ],
+                    );
+                  } else if (state.isLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return null;
+                },
+              ),
+            ),
           ],
         ),
       ),
