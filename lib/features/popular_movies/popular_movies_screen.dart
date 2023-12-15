@@ -66,50 +66,53 @@ class _PopularMoviesScreenState extends ConsumerState<PopularMoviesScreen> {
     final favouriteIds = ref.watch(fetchFavouriteIdsListProvider.notifier);
     List<Movie>? movies = state.value?.movies;
 
-    return Scaffold(
-      appBar: const MyAppBar(),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 28.h),
-            Text(
-              AppLocalizations.of(context).popularMovieListTitle,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            SizedBox(height: 20.h),
-            Expanded(
-              child: ListView.separated(
-                padding: EdgeInsets.only(bottom: 40.h),
-                controller: scrollController,
-                separatorBuilder: (context, index) => SizedBox(height: 20.h),
-                itemCount: (movies?.length ?? 0) + 1,
-                itemBuilder: (context, index) {
-                  if (index < (movies?.length ?? 0)) {
-                    Movie movie = movies![index];
-                    return MovieListItem(
-                      isFavourite:
-                          (favouriteIds.state ?? []).contains(movie.id),
-                      movie: movie,
-                      onTap: () => context.goNamed(
-                        AppRoute.movieDetailsScreen.name,
-                        pathParameters: {'id': movie.id.toString()},
-                      ),
-                    );
-                  } else if (!state.isLoading && (movies?.isEmpty ?? false)) {
-                    return EmptyStateWidget(
-                      onRefresh: () => ref.refresh(
-                          popularMoviesListScreenControllerProvider.future),
-                    );
-                  } else if (state.isLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  return null;
-                },
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: const MyAppBar(),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 28.h),
+              Text(
+                AppLocalizations.of(context).popularMovieListTitle,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-            ),
-          ],
+              SizedBox(height: 20.h),
+              Expanded(
+                child: ListView.separated(
+                  padding: EdgeInsets.only(bottom: 40.h),
+                  controller: scrollController,
+                  separatorBuilder: (context, index) => SizedBox(height: 20.h),
+                  itemCount: (movies?.length ?? 0) + 1,
+                  itemBuilder: (context, index) {
+                    if (index < (movies?.length ?? 0)) {
+                      Movie movie = movies![index];
+                      return MovieListItem(
+                        isFavourite:
+                            (favouriteIds.state ?? []).contains(movie.id),
+                        movie: movie,
+                        onTap: () => context.goNamed(
+                          AppRoute.movieDetailsScreen.name,
+                          pathParameters: {'id': movie.id.toString()},
+                        ),
+                      );
+                    } else if (!state.isLoading && (movies?.isEmpty ?? false)) {
+                      return EmptyStateWidget(
+                        onRefresh: () => ref.refresh(
+                            popularMoviesListScreenControllerProvider.future),
+                      );
+                    } else if (state.isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
