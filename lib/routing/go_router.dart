@@ -45,7 +45,22 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                   name: AppRoute.movieDetailsScreen.name,
                   pageBuilder: (context, state) {
                     final id = state.pathParameters['id']!;
-                    return MaterialPage(
+
+                    return CustomTransitionPage(
+                      reverseTransitionDuration:
+                          const Duration(milliseconds: 300),
+                      transitionDuration: const Duration(milliseconds: 300),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              FadeTransition(
+                        opacity: Tween<double>(begin: 0.0, end: 1.0)
+                            .animate(CurvedAnimation(
+                          parent: ModalRoute.of(context)!.animation!,
+                          curve: Curves.easeInOut,
+                          reverseCurve: Curves.easeOut,
+                        )),
+                        child: child,
+                      ),
                       child: MovieDetailsScreen(id: id),
                     );
                   },

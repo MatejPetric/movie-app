@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_app/services/network/custom_interceptor.dart';
 import 'package:movie_app/services/network/env_config.dart';
 
 enum HttpMethod { get, post, put, patch, delete }
@@ -10,15 +11,10 @@ class ApiService {
     receiveDataWhenStatusError: true,
     validateStatus: (status) => status! < 400,
     baseUrl: envConfig.baseUrl,
-    queryParameters: {
-      'api_key': envConfig.apiKey,
-      'language': Platform.localeName
-    },
+    queryParameters: {'language': Platform.localeName},
     connectTimeout: const Duration(milliseconds: 5000),
-  ));
-
-  Options defaultOptions =
-      Options(headers: {'Authorization': 'Bearer ${envConfig.bearer}'});
+  ))
+    ..interceptors.add(CustomInterceptor(bearerToken: envConfig.bearer));
 
   Future request({
     required String endpoint,
@@ -34,7 +30,7 @@ class ApiService {
         endpoint,
         queryParameters: queryParameters,
         data: data,
-        options: options ?? defaultOptions,
+        options: options,
       );
 
       return onSuccess(response.data);

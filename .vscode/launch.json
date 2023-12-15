@@ -2,6 +2,12 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "IOS phone",
+      "request": "launch",
+      "type": "dart",
+      "args": ["-d", "Matej", "--dart-define", "ENVIRONMENT=dev"]
+    },
+    {
       "name": "IOS Simulator",
       "request": "launch",
       "type": "dart",
